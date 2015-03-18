@@ -5,6 +5,7 @@ The protocol is published here:https://github.com/cmfcmf/KolbeHomeSystem/blob/ma
 
 To install the software you can use the install- script https://github.com/sarom5/HausComC/blob/master/src/Release/HausCom_install.sh
 After installation you start the prgram by insert "HausCom" on your command.
+You can set the address and the UART- Port in the File "/usr/local/etc/HausCom/HausCom.conf". Attention! You must be root, to edit this file!
 
 This script creates everything you need. It compiles the software on the computer, you want to use.
 If you want to use a RS485 Bus, sending and reseiving by the same wires, you can set the GPIO- Pin here: https://github.com/sarom5/HausComC/blob/master/src/Raspberry_GPIO.c
