@@ -94,27 +94,6 @@ void general_conf(int fd)
 	//system("stty -a");
 }
 
-void setMARK(int fd)
-{
-	struct termios options;
-	tcgetattr(fd, &options);
-
-	options.c_cflag |= PARENB | CMSPAR;
-	options.c_cflag &= ~PARODD;
-
-	tcsetattr(fd, TCSANOW, &options);
-}
-
-void setSPACE(int fd)
-{
-	struct termios options;
-	tcgetattr(fd, &options);
-
-	options.c_cflag |= PARENB | PARODD | CMSPAR;
-
-	tcsetattr(fd, TCSANOW, &options);
-}
-
 uint8_t getI(uint8_t Byte)
 {
 	uint8_t counter = 0;
@@ -125,6 +104,54 @@ uint8_t getI(uint8_t Byte)
 		Byte >>= 1;
 	}
 	return counter;
+}
+
+void setMARK(int fd, uint8_t data)
+{
+	struct termios options;
+	tcgetattr(fd, &options);
+
+	if ((getI(data) % 2))
+	//there are even Is
+	{
+		//the 8. Bit is one, so we has to use ODD
+		options.c_cflag |= (PARENB);
+		options.c_cflag &= ~PARODD;
+	}
+	//there are odd Is
+	else
+	{
+		//the 8. Bit is one, so we has to use EVEN
+		options.c_cflag |= (PARENB | PARODD);
+	}
+	
+	//options.c_cflag |= PARENB | CMSPAR;
+	//options.c_cflag &= ~PARODD;
+
+	tcsetattr(fd, TCSANOW, &options);
+}
+
+void setSPACE(int fd, uint8_t data)
+{
+	struct termios options;
+	tcgetattr(fd, &options);
+
+	if ((getI(data) % 2))
+	//there are even Is
+	{
+		//the 8. Bit is one, so we has to use ODD
+		options.c_cflag |= (PARENB | PARODD);
+	}
+	//there are odd Is
+	else
+	{
+		//the 8. Bit is one, so we has to use EVEN
+		options.c_cflag |= (PARENB);
+		options.c_cflag &= ~PARODD;
+	}
+	//options.c_cflag |= PARENB | PARODD | CMSPAR;
+
+	tcsetattr(fd, TCSANOW, &options);
 }
 
 void setAddress_filter(int fd, uint8_t MyAddress)

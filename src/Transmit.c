@@ -49,7 +49,7 @@ int trasmit(uint8_t datac, uint8_t *data)
 			data++;
 		}
 		//setSPACE(fd);
-		setMARK(fd);
+		setMARK(fd, Address[0]);
 		int n = write(fd, Address, 1);
 		if (n < 0)
 		{
@@ -62,18 +62,22 @@ int trasmit(uint8_t datac, uint8_t *data)
 		}
 
 		//setMARK();
-		setSPACE(fd);
-		n = write(fd, transmit, Data_len);
-		if (n < 0)
-		{
-			perror("write() of Data failed!\n");
-			return -1;
-		}
-		else
-		{
-			printf("write data: ");
-			for (uint8_t i = 0; i < Data_len; i++)
-				printf(" %d,", transmit[i]);
+		printf("write data: ");
+		for(int i = 0; i < Data_len; i ++){
+			setSPACE(fd, transmit[i]);
+			uint8_t tmp[1] = { transmit[i] };
+			n = write(fd, tmp, 1);
+			if (n < 0)
+			{
+				perror("write() of Data failed!\n");
+				return -1;
+			}
+			else
+			{
+				
+				//for (uint8_t i = 0; i < Data_len; i++)
+					printf(" %d,", transmit[i]);
+			}
 		}
 		printf(" \n");
 
