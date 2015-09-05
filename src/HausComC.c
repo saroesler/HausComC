@@ -23,29 +23,36 @@ int main(int argc, char *argv[])
 
 		int Message_len = argc - 2;
 
-		uint8_t Data[Message_len +2 ];//+1 for XOR  +1 for End of Data
-		uint8_t *Datapt = &Data[0];
+		char Data[Message_len * 2 ];
+		char datacount = 0;
 
 		for (int i = 2; i < argc; i++)
 		{
-			Data[i-2] = atoi(argv[i]);
+			char *tmppt = argv[i];
+			while(*tmppt){
+				Data[datacount++] = *tmppt;
+				tmppt ++;
+			}
 		}
-
+		Data[datacount++] = '\0';
 		switch (Mode[0])
 		/* Check for option character. */
 		{
 			case '-':
 				switch (Mode[1])
 				{
+					case 'b':
+						printf("Transmit message and receive the answer.\n");
 					case 'o':
 						printf("Transmit message!\n");
 						if (Message_len)
 						{
-							Backmessage = trasmit(Message_len, Datapt);
+							Backmessage = trasmit(Message_len, Data);
 						}
 						else
 							printf("There is no Message to transmit!\n");
-						break;
+						if(Mode[1] == 'o' || !Message_len)
+							break;
 					case 'i':
 						printf("Receive message!\n");
 						Backmessage = receive();

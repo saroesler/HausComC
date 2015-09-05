@@ -26,5 +26,6 @@
 //for the Raspberry
 #define RASPBERRY
 
+extern uint8_t xor(char*);
 
 #endif /* HAUSCOMC_H_ */

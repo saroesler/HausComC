@@ -1,4 +1,5 @@
 #include "HausComC.h"
+#include "ConfFile.h"
 
 int open_port(void)
 {
@@ -61,6 +62,7 @@ void general_conf(int fd)
 	// extended input processing off, signal chars off
 	//
 	options.c_lflag &= ~(ECHO | ECHONL | ICANON | IEXTEN | ISIG);
+	/*
 	//
 	// Turn off character processing
 	//todo clear current char size mask, no parity checking,
@@ -74,7 +76,7 @@ void general_conf(int fd)
 
 	//2 Stop bits
 	options.c_cflag |= CSTOPB;
-
+/*
 	//parity error not ignore
 	//mark parity errors with \377
 	options.c_iflag &= ~IGNPAR;
@@ -94,6 +96,7 @@ void general_conf(int fd)
 	//system("stty -a");
 }
 
+/*
 uint8_t getI(uint8_t Byte)
 {
 	uint8_t counter = 0;
@@ -202,4 +205,4 @@ void delAddress_filter(int fd)
 	options.c_cflag |= PARENB;
 
 	tcsetattr(fd, TCSANOW, &options);
-}
+}*/

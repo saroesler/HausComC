@@ -55,7 +55,7 @@ char* getPort(char* Port)
 	return Port;
 }
 
-char* getMyAddress(char* Address)
+char getMyAddress()
 {
 	FILE *datei;
 	char text[100 + 1];
@@ -75,26 +75,92 @@ char* getMyAddress(char* Address)
 		if (temp)
 		{
 			printf("read Address\n");
+
+			int i = 0;
 			char *ptr;
 
 			//select word after Port
 			ptr = strtok(temp, "=");
 			ptr = strtok(NULL, "=");
-			strncpy(Address, ptr, 3);
 
+			while(*ptr == ' '){
+				ptr ++;
+			}
+			printf("%c", *ptr);
 			fclose(datei);
+			return *ptr;
 		}
 		else
 		{
 			fclose(datei);
 			perror("Can not find \"ADDRESS\"- Argument in file");
-			return NULL;
+			return 0;
 		}
 	}
 	else
 	{
 		perror("Can not find config- file \"HausCom.conf\"");
-		return NULL;
+		return 0;
 	}
-	return Address;
+}
+
+uint8_t getPin(char* Pin)
+{
+	FILE *datei;
+		char text[100 + 1];
+		datei = fopen(CONF_FILE, "r");
+
+		if (datei != NULL)
+		{
+			//read file
+			printf("read PIN by file\n");
+			fscanf(datei, "%100c", text);
+			/* String muss mit Nullbyte abgeschlossen sein */
+			text[100] = '\0';
+
+			//search for Port
+			char *temp = strstr(text, "PIN=");
+			if (temp)
+			{fclose(datei);
+				int i = 0;
+				char *ptr;
+				char tmp2[10];
+
+				//select word after Port
+				ptr = strtok(temp, "=");
+				ptr = strtok(NULL, "=");
+
+				strcpy(tmp2, ptr);
+
+				//look for ";" and delete it
+				while (tmp2[i] != ';')
+				{
+					i++;
+				}
+				tmp2[i] = '\0';
+
+				char* tmp = tmp2;
+				uint8_t j = 0;
+
+				while(*tmp){
+					if(*tmp != ' '){
+						Pin[j++] = *tmp;
+					}
+					tmp ++; printf("%u",j);
+				}
+				Pin[j] = '\0';
+			}
+			else
+			{
+				fclose(datei);
+				perror("Can not find \"PIN\"- Argument in file");
+				return 1;
+			}
+		}
+		else
+		{
+			perror("Can not find config- file \"HausCom.conf\"");
+			return 1;
+		}
+		return 0;
 }
