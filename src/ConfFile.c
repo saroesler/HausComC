@@ -76,7 +76,6 @@ char getMyAddress()
 		{
 			printf("read Address\n");
 
-			int i = 0;
 			char *ptr;
 
 			//select word after Port
